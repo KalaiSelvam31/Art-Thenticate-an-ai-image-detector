@@ -1,109 +1,163 @@
-🎨 Art-thenticate: AI Image Detection Service
-A backend service built with Spring Boot to detect AI-generated images and authenticate original digital art. This project provides a secure, robust foundation for user management and will be extended to include the core AI analysis features.
+# 🎨 Art-thenticate
 
-📖 About The Project
-In an era where AI-generated content is becoming increasingly sophisticated, distinguishing between human-created art and synthetic images is a growing challenge. Art-thenticate aims to provide a reliable service for artists, content creators, and platforms to verify the origin of digital images.
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen.svg)](https://spring.io/projects/spring-boot)
+[![Java](https://img.shields.io/badge/Java-17+-orange.svg)](https://www.oracle.com/java/)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+> AI Image Detection Service - Authenticate Original Digital Art
+
+A robust backend service built with Spring Boot designed to detect AI-generated images and authenticate original digital art. This project provides a secure foundation for user management and will be extended to include advanced AI analysis features.
+
+## 📋 Table of Contents
+
+- [About](#about)
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Getting Started](#getting-started)
+- [API Endpoints](#api-endpoints)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
+
+## 🎯 About
+
+In an era where AI-generated content is becoming increasingly sophisticated, distinguishing between human-created art and synthetic images is a growing challenge. **Art-thenticate** aims to provide a reliable service for artists, content creators, and platforms to verify the origin of digital images.
 
 This repository contains the backend REST API that handles user registration, authentication, and will serve as the engine for the image analysis functionality.
 
-✅ Current Progress (Features Developed)
-The foundational backend for user management is complete. This includes:
+## ✨ Features
 
-🔐 User Authentication & Security
-User Registration: A secure endpoint (/register) allows new users to create an account.
+### 🔐 User Authentication & Security
 
-The system checks if a user already exists with the given email to prevent duplicates.
+- **User Registration**
+  - Secure endpoint for new user account creation
+  - Duplicate email validation
+  - Password hashing with BCryptPasswordEncoder
+  
+- **User Login**
+  - Credential validation and authentication
+  - Secure password comparison with stored hashes
+  
+- **Security Configuration**
+  - Powered by Spring Security
+  - Public access limited to registration and login endpoints
+  - Stateless architecture ready for JWT integration
+  - Protected endpoints require authentication
 
-Passwords are securely hashed using BCryptPasswordEncoder before being stored.
+### 🏗️ Core Backend Architecture
 
-User Login: An endpoint (/Login) for authenticating users.
+- **RESTful API**: Built with Spring Web controllers
+- **Service Layer**: Clean separation of business logic
+  - `RegisterService`
+  - `LoginService`
+- **Data Persistence**: Spring Data JPA integration
+  - `Users` entity for user data modeling
+  - `Registry` repository for database operations
+- **DTOs**: Secure data transfer with validation
+  - `RegisterDTO`
+  - `LoginDTO`
 
-The service validates credentials by comparing the provided password with the stored hash.
+## 🛠️ Technology Stack
 
-Security Configuration: The application is secured using Spring Security.
+- **Backend**: Java, Spring Boot
+- **Security**: Spring Security
+- **Database**: Spring Data JPA / Hibernate
 
-Public access is granted only to the registration and login endpoints.
+## 🚀 Getting Started
 
-All other endpoints require authentication.
+### Prerequisites
 
-The security configuration is stateless, preparing the application for token-based authentication (e.g., JWT).
+- Java 17 or higher
+- Maven 3.6+
+- Your preferred IDE (IntelliJ IDEA, Eclipse, VS Code)
+- Database (PostgreSQL/MySQL/H2)
 
-🏗️ Core Backend Structure
-RESTful API: The application is built as a REST API using Spring Web controllers.
+### Installation
 
-Service Layer: Business logic is properly separated into service classes (RegisterService, LoginService).
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/art-thenticate.git
+cd art-thenticate
+```
 
-Data Persistence: User data is stored in a database managed by Spring Data JPA.
+2. Configure your database
+```properties
+# application.properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/artthenticate
+spring.datasource.username=your_username
+spring.datasource.password=your_password
+```
 
-A Users entity models the user data in the database.
+3. Build the project
+```bash
+mvn clean install
+```
 
-A Registry repository interface handles all database operations.
+4. Run the application
+```bash
+mvn spring-boot:run
+```
 
-Data Transfer Objects (DTOs): RegisterDTO and LoginDTO are used to safely transfer data between the client and the server, with built-in validation.
+The server will start on `http://localhost:8080`
 
-🚀 Future Development (Roadmap)
-The next phase of development will focus on implementing the core AI detection functionality and enhancing the API.
+## 📡 API Endpoints
 
-1. Core AI Detection Functionality
-Image Upload Endpoint: Create a secure endpoint for authenticated users to upload images for analysis.
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| POST | `/register` | Register a new user | Public |
+| POST | `/Login` | Authenticate a user | Public |
+| GET | `/hellov` | Get all users (Dev) | Private |
 
-AI Model Integration: Integrate a machine learning or deep learning model (e.g., a CNN or Vision Transformer) to process the images. This service will determine the probability of an image being AI-generated.
 
-Analysis Results API: Develop endpoints for users to retrieve the analysis results for their submitted images, including a probability score and a binary classification (AI/Original).
 
-Image Analysis Model: Create a new JPA entity (ImageAnalysis) to store uploaded image metadata and the corresponding AI detection results, linked to the user who submitted it.
+## 🗺️ Roadmap
 
-2. Usage & Credit System
-Implement Credit Logic: The Users entity currently has a field named able initialized to 5. This will be developed into a credit system.
+### Phase 1: Core AI Detection Functionality
+- [ ] Image upload endpoint for authenticated users
+- [ ] AI model integration (CNN/Vision Transformer)
+- [ ] Analysis results API with probability scores
+- [ ] `ImageAnalysis` entity for storing analysis metadata
 
-Decrement on Use: For each image analysis, a user's able credit count will be decremented.
+### Phase 2: Usage & Credit System
+- [ ] Implement credit logic (currently initialized to 5 per user)
+- [ ] Credit decrement on image analysis
+- [ ] Usage limits and validation
+- [ ] Credit purchase/renewal system
 
-Usage Limits: Users will be blocked from submitting new images for analysis if their credit count reaches zero.
+### Phase 3: Enhanced API Security
+- [ ] JWT implementation for authentication
+- [ ] Token-based request authorization
+- [ ] Refresh token mechanism
+- [ ] Role-based access control (RBAC)
 
-3. Enhanced API Security
-JWT Implementation: Replace the current basic authentication with JSON Web Tokens (JWT). Upon successful login, the API will return a JWT, which must be included in the headers of all subsequent authenticated requests. This will complete the stateless architecture.
+### Phase 4: Advanced Features
+- [ ] Batch image processing
+- [ ] Analysis history and reporting
+- [ ] API rate limiting
+- [ ] Webhook notifications
+- [ ] Admin dashboard
 
-🛠️ Technology Stack
-Backend: Java, Spring Boot
+## 🤝 Contributing
 
-Security: Spring Security
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-Database: Spring Data JPA / Hibernate
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-Utilities: Lombok
+## 📄 License
 
-Build Tool: Maven
+Distributed under the MIT License. See `LICENSE` for more information.
 
-Endpoints
-Method
+## 🙏 Acknowledgments
 
-Endpoint
+- [Spring Boot](https://spring.io/projects/spring-boot)
+- [Spring Security](https://spring.io/projects/spring-security)
+- [Spring Data JPA](https://spring.io/projects/spring-data-jpa)
+- [Lombok](https://projectlombok.org/)
 
-Description
+---
 
-Access
-
-POST
-
-/register
-
-Registers a new user.
-
-Public
-
-POST
-
-/Login
-
-Authenticates a user.
-
-Public
-
-GET
-
-/hellov
-
-(Dev) Gets all users.
-
-Private
-
+<p align="center">Made with ❤️ for the digital art community</p>
